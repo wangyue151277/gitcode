@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="gsdemo:war">
+    <output-path>$PROJECT_DIR$/gsdemo/target</output-path>
+    <root id="archive" name="gsdemo.war">
+      <element id="artifact" artifact-name="gsdemo:war exploded" />
+    </root>
+  </artifact>
+</component>
