@@ -49,42 +49,51 @@ public class UserService {
 
         //什么都不能少空的，空字符串也不行，默认的最前面的/前面会有一个空字符串： /manage/user/*
         //要是空的，就说有错
-        if (username == null || username.equals("")||password == null || password.equals("") ){
+        if (username == null || username.equals("") || password == null || password.equals("") ){
             rc.setStats(1);
             rc.setMag("账号密码错误（输入有空）");
             return rc;
         }
 
         //查找是否存在用户
-        Users u = ud.selectOne(username, password);
 
-        //普通账号登录
-        if (u.getType() == 0){
-            rc.setStats(0);
-            rc.setMag("普通账号登录");
-            rc.setData(u);
-            return rc;
-        }
+        Users u = ud.selectOne(username, password);
+        String uname = u.getUname();
+
 
         //密码或者账号错了
         if (u == null){
             rc.setStats(1);
             rc.setMag("账号密码错误（数据库没有你的账号）");
+            System.out.println(u.toString());
             return rc;
         }
 
-        //不是管理员也不是普通
-        if (u.getType() != 1){
-            rc.setStats(2);
-            rc.setMag("非管理员账号和普通账号");
+        Integer type = u.getType();
+
+        //普通账号登录
+        if (type == 0){
+            rc.setStats(0);
+            rc.setMag("普通账号登录");
+            rc.setData(u);
+            System.out.println(u.toString());
             return rc;
         }
 
-        //最后的管理员登录
-        rc .setStats(0);
-        rc.setMag("管理员登录成功");
-        rc.setData(u);
+        //管理员登录
+        if (type == 1)
+        {
+            rc.setStats(0);
+            rc.setMag("管理员登录成功");
+            rc.setData(u);
+            System.out.println(u.toString());
+            return rc;
+        }
 
+
+        rc.setMag("其他情况");
+        rc.setStats(1);
         return rc;
+
     }
 }

@@ -1,7 +1,10 @@
 package com.itdr.testdemo;
 
+import com.itdr.pojo.Users;
 import com.itdr.utils.PoolUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -27,14 +30,17 @@ public class TestDemo1 {
     @Test
     public void test2() throws SQLException {
 
-        ComboPooledDataSource com = PoolUtil.getCom();
-        Connection connection = com.getConnection();
-        String sql = "select * from users";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet resultSet = ps.executeQuery();
-        while (resultSet.next()){
-            System.out.println(resultSet.getNString(2));
-        }
+        QueryRunner qr = new QueryRunner(PoolUtil.getCom());
+
+        String sql = "select * from users where uname = ? and upassword = ?";
+        Users u = null;
+        String name1 = "李四";
+        String psd1 = "123";
+        String name2 = "zhangsan";
+        String psd2 = "111";
+        u = qr.query(sql,new BeanHandler<Users>(Users.class),name2,psd2);
+        System.out.println(u.toString());
+
 
     }
 }

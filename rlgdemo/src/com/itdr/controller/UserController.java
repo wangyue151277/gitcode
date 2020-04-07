@@ -7,10 +7,7 @@ import com.itdr.utils.PathUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,10 +27,6 @@ public class UserController extends HttpServlet {
         注*pageNum是页码，pageSize是条数
          */
 
-        //解决乱码问题
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
-
         //获取路径
         String path = PathUtil.getPath(request.getPathInfo());
 
@@ -47,11 +40,11 @@ public class UserController extends HttpServlet {
                 break;
             case "login":
                 rc = loginDo(request);
+                break;
         }
 
         //5.返回响应
         response.getWriter().write(rc.toString());
-        System.out.println(rc.toString());
 
     }
 
@@ -104,6 +97,11 @@ public class UserController extends HttpServlet {
         //创建session对象,在用户登录成功的时候
         HttpSession session = request.getSession();
         session.setAttribute("user",rc.getData());
+        System.out.println(session.getAttribute("user"));
+
+
+
+
 
         //返回统一返回对象
         return rc;

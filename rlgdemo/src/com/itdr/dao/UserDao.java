@@ -7,6 +7,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -36,17 +37,26 @@ public class UserDao {
     }
 
     public Users selectOne(String username, String password) {
-//      ComboPooledDataSource com = PoolUtil.getCom();
+        //用dbutils的queryrunner类，的query方法
         QueryRunner qr = new QueryRunner(PoolUtil.getCom());
+
+
+
         String sql = "select * from users where uname = ? and upassword = ?";
+
         Users u = null;
+
         try {
-            u = qr.query(sql,new BeanHandler<Users>(Users.class),username,password);
+
+            String uname = URLDecoder.decode(username, "utf-8");
+            String upassword = URLDecoder.decode(password, "utf-8");
+
+            u = qr.query(sql,new BeanHandler<Users>(Users.class),uname,upassword);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return u;
+
 
     }
 }
