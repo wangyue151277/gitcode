@@ -4,7 +4,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-@WebFilter(filterName = "MessyCodeFilter",value = "/manage/*")
+//@WebFilter(filterName = "MessyCodeFilter",value = "/manage/*")
 public class MessyCodeFilter implements Filter {
     public void destroy() {
     }

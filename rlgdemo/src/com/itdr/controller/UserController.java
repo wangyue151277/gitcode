@@ -41,6 +41,9 @@ public class UserController extends HttpServlet {
             case "login":
                 rc = loginDo(request);
                 break;
+            case "ban":
+                rc = ban(request);
+                break;
         }
 
         //5.返回响应
@@ -52,7 +55,7 @@ public class UserController extends HttpServlet {
     private ResponseCode listDo(HttpServletRequest request){
 
         //创建统一返回对象
-        ResponseCode rs = new ResponseCode();
+        ResponseCode rc = null;
 
         //获取登录时的session
         HttpSession session = request.getSession();
@@ -62,16 +65,14 @@ public class UserController extends HttpServlet {
 
         //没登录，session没东西，就提示去登陆
         if (user == null){
-            rs.setStats(3);
-            rs.setMag("请登录后操作");
-            return rs;
+            rc = ResponseCode.failtureRS(1,"请登录后操作");
+            return rc;
         }
 
         //不是管理员，不能看，这是在登录之后才能看到的
         if (user.getType() != 1){
-            rs.setStats(3);
-            rs.setMag("没有操作权限");
-            return rs;
+            rc = ResponseCode.failtureRS(1,"不是管理员没有操作权限");
+            return rc;
         }
 
         //从前端获取的请求对象的字符串表现形式
@@ -79,8 +80,8 @@ public class UserController extends HttpServlet {
         String pageNum = request.getParameter("pageNum");
 
         //调用业务层的查询全部的方法,并且返回到统一返回对象
-        rs = us.selectAll(pageSize, pageNum);
-        return rs;
+        rc = us.selectAll(pageSize, pageNum);
+        return rc;
 
     }
 
@@ -99,11 +100,18 @@ public class UserController extends HttpServlet {
         session.setAttribute("user",rc.getData());
         System.out.println(session.getAttribute("user"));
 
-
-
-
-
         //返回统一返回对象
+        return rc;
+
+    }
+
+    //方法之二 禁用用户
+    private ResponseCode ban(HttpServletRequest request){
+
+        String uname = request.getParameter("uname");
+
+        ResponseCode rc = us.selectOneAndBan(uname);
+
         return rc;
 
     }

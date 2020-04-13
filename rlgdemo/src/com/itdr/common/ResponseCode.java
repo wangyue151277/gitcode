@@ -2,6 +2,7 @@ package com.itdr.common;
 
 public class ResponseCode<T> {
 
+    //状态码，错误信息，数据
     private Integer stats;
     private String mag;
     private T data;
@@ -30,6 +31,24 @@ public class ResponseCode<T> {
         this.data = data;
     }
 
+    //成功之后，返回状态码(0)和数据
+    public static <T> ResponseCode successRS(T data){
+        ResponseCode rc = new ResponseCode();
+        rc.setStats(0);
+        rc.setData(data);
+        return rc;
+    }
+
+
+    //失败之后，返回状态码和信息
+    public static ResponseCode failtureRS(Integer stats, String mag){
+        ResponseCode rc = new ResponseCode();
+        rc.setStats(stats);
+        rc.setMag(mag);
+        return rc;
+    }
+
+    //toString方法
     @Override
     public String toString() {
         return "ResponseCode{" +
@@ -38,9 +57,6 @@ public class ResponseCode<T> {
                 ", data=" + data +
                 '}';
     }
-/*
-    成功返回状态码和数据
-    失败返回状态码和失败信息
-     */
+
 }
 
